@@ -289,6 +289,10 @@ void              gtk_widget_render                        (GtkWidget           
 
 void              gtk_widget_snapshot                      (GtkWidget            *widget,
                                                             GtkSnapshot          *snapshot);
+void              gtk_widget_snapshot_child                (GtkWidget            *widget,
+                                                            GtkWidget            *child,
+                                                            GtkSnapshot          *snapshot);
+
 
 /* inline getters */
 
