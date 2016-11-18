@@ -10736,10 +10736,21 @@ gtk_widget_real_map (GtkWidget *widget)
 
   if (!_gtk_widget_get_mapped (widget))
     {
+      GtkWidget *p;
       priv->mapped = TRUE;
 
       if (_gtk_widget_get_has_window (widget))
-	gdk_window_show (priv->window);
+        gdk_window_show (priv->window);
+
+      for (p = gtk_widget_get_first_child (widget);
+           p != NULL;
+           p = gtk_widget_get_next_sibling (p))
+        {
+          if (_gtk_widget_get_visible (p) &&
+              _gtk_widget_get_child_visible (p) &&
+              !_gtk_widget_get_mapped (p))
+            gtk_widget_map (p);
+        }
     }
 }
 
@@ -10758,10 +10769,18 @@ gtk_widget_real_unmap (GtkWidget *widget)
 
   if (_gtk_widget_get_mapped (widget))
     {
+      GtkWidget *child;
       priv->mapped = FALSE;
 
       if (_gtk_widget_get_has_window (widget))
-	gdk_window_hide (priv->window);
+        gdk_window_hide (priv->window);
+
+      for (child = gtk_widget_get_first_child (widget);
+           chlid != NULL;
+           child = gtk_widget_get_next_sibling (child))
+        {
+          gtk_widget_unmap (child);
+        }
     }
 }
 
