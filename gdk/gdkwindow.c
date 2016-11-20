@@ -2894,6 +2894,8 @@ gdk_window_begin_draw_frame (GdkWindow            *window,
   GdkDrawingContext *context;
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (gdk_window_has_native (window), NULL);
+  g_return_val_if_fail (gdk_window_is_toplevel (window), NULL);
 
   if (window->drawing_context != NULL)
     {
@@ -2903,13 +2905,12 @@ gdk_window_begin_draw_frame (GdkWindow            *window,
       return NULL;
     }
 
-  if (gdk_window_has_native (window) && gdk_window_is_toplevel (window))
-    gdk_window_begin_paint_internal (window, region);
-
   context = GDK_WINDOW_IMPL_GET_CLASS (window->impl)->create_draw_context (window, region);
 
   /* Do not take a reference, to avoid creating cycles */
   window->drawing_context = context;
+
+  gdk_window_begin_paint_internal (window, region);
 
   return context;
 }
