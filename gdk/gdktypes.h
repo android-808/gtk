@@ -146,6 +146,7 @@ typedef struct _GdkSeat               GdkSeat;
 
 typedef struct _GdkDrawingContext     GdkDrawingContext;
 typedef struct _GdkGLContext          GdkGLContext;
+typedef struct _GdkVulkanContext      GdkVulkanContext;
 
 /**
  * GdkByteOrder:
