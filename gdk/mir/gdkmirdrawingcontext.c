@@ -53,10 +53,12 @@ gdk_mir_drawing_context_init (GdkMirDrawingContext *self)
 
 GdkDrawingContext *
 gdk_mir_drawing_context_new (GdkWindow            *window,
+                             GdkGLContext         *context,
                              const cairo_region_t *region)
 {
   return g_object_new (GDK_TYPE_MIR_DRAWING_CONTEXT,
                        "window", window,
+                       "paint-context", context,
                        "clip", region,
                        NULL);
 }

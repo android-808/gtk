@@ -1513,10 +1513,12 @@ gdk_broadway_get_last_seen_time (GdkWindow  *window)
 
 static GdkDrawingContext *
 gdk_broadway_window_create_draw_context (GdkWindow            *window,
-                                        const cairo_region_t *region)
+                                         GdkGLContext         *context,
+                                         const cairo_region_t *region)
 {
   return g_object_new (GDK_TYPE_BROADWAY_DRAWING_CONTEXT,
                        "window", window,
+                       "paint-context", context,
                        "clip", region,
                        NULL);
 }

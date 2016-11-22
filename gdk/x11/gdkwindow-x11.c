@@ -213,10 +213,12 @@ gdk_x11_window_get_unscaled_size (GdkWindow *window,
 
 static GdkDrawingContext *
 gdk_x11_window_create_draw_context (GdkWindow            *window,
+                                    GdkGLContext         *context,
                                     const cairo_region_t *region)
 {
   return g_object_new (GDK_TYPE_X11_DRAWING_CONTEXT,
                        "window", window,
+                       "paint-context", context,
                        "clip", region,
                        NULL);
 }

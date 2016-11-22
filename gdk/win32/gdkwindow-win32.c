@@ -6028,10 +6028,12 @@ _gdk_win32_window_get_unscaled_size (GdkWindow *window,
 
 static GdkDrawingContext *
 gdk_win32_window_create_draw_context (GdkWindow            *window,
+                                      GdkGLContext         *context,
                                       const cairo_region_t *region)
 {
   return g_object_new (GDK_TYPE_WIN32_DRAWING_CONTEXT,
                        "window", window,
+                       "paint-context", context,
                        "clip", region,
                        NULL);
 }

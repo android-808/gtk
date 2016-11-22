@@ -306,6 +306,7 @@ struct _GdkWindowImplClass
                                            cairo_region_t *update_area);
 
   GdkDrawingContext *(* create_draw_context)  (GdkWindow            *window,
+                                               GdkGLContext         *context,
                                                const cairo_region_t *region);
 };
 

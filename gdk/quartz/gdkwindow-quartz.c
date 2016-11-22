@@ -2828,10 +2828,12 @@ gdk_quartz_window_get_scale_factor (GdkWindow *window)
 
 static GdkDrawingContext *
 gdk_quartz_window_create_draw_context (GdkWindow            *window,
+                                       GdkGLContext         *context,
                                        const cairo_region_t *region)
 {
   return g_object_new (GDK_TYPE_QUARTZ_DRAWING_CONTEXT,
                        "window", window,
+                       "paint-context", context,
                        "clip", region,
                        NULL);
 }

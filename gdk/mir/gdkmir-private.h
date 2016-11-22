@@ -95,7 +95,7 @@ void _gdk_mir_window_impl_set_cursor_state (GdkMirWindowImpl *impl, gdouble x, g
 
 void _gdk_mir_window_impl_get_cursor_state (GdkMirWindowImpl *impl, gdouble *x, gdouble *y, gboolean *cursor_inside, guint *button_state);
 
-GdkDrawingContext *gdk_mir_drawing_context_new (GdkWindow *window, const cairo_region_t *region);
+GdkDrawingContext *gdk_mir_drawing_context_new (GdkWindow *window, GdkGLContext *context, const cairo_region_t *region);
 
 GdkMirEventSource *_gdk_mir_display_get_event_source (GdkDisplay *display);
 

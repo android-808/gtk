@@ -3566,10 +3566,12 @@ gdk_wayland_window_show_window_menu (GdkWindow *window,
 
 static GdkDrawingContext *
 gdk_wayland_window_create_draw_context (GdkWindow            *window,
+                                        GdkGLContext         *context,
                                         const cairo_region_t *region)
 {
   return g_object_new (GDK_TYPE_WAYLAND_DRAWING_CONTEXT,
                        "window", window,
+                       "paint-context", context,
                        "clip", region,
                        NULL);
 }

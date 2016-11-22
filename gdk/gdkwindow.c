@@ -2851,6 +2851,7 @@ gdk_window_end_paint_internal (GdkWindow *window)
 /**
  * gdk_window_begin_draw_frame:
  * @window: a #GdkWindow
+ * @context: (allow-none): the context used to draw the frame
  * @region: a Cairo region
  *
  * Indicates that you are beginning the process of redrawing @region
@@ -2889,6 +2890,7 @@ gdk_window_end_paint_internal (GdkWindow *window)
  */
 GdkDrawingContext *
 gdk_window_begin_draw_frame (GdkWindow            *window,
+                             GdkGLContext         *gl_context,
                              const cairo_region_t *region)
 {
   GdkDrawingContext *context;
@@ -2896,6 +2898,8 @@ gdk_window_begin_draw_frame (GdkWindow            *window,
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
   g_return_val_if_fail (gdk_window_has_native (window), NULL);
   g_return_val_if_fail (gdk_window_is_toplevel (window), NULL);
+  g_return_val_if_fail (gl_context == NULL || GDK_IS_GL_CONTEXT (gl_context), NULL);
+  g_return_val_if_fail (gdk_gl_context_get_window (gl_context) == window, NULL);
 
   if (window->drawing_context != NULL)
     {
@@ -2905,7 +2909,7 @@ gdk_window_begin_draw_frame (GdkWindow            *window,
       return NULL;
     }
 
-  context = GDK_WINDOW_IMPL_GET_CLASS (window->impl)->create_draw_context (window, region);
+  context = GDK_WINDOW_IMPL_GET_CLASS (window->impl)->create_draw_context (window, gl_context, region);
 
   /* Do not take a reference, to avoid creating cycles */
   window->drawing_context = context;
