@@ -8756,7 +8756,8 @@ static void
 reset_style_recurse (GtkWidget *widget)
 {
   GtkWidget *child;
-  _gtk_widget_invalidate_style_context (widget, GTK_CSS_CHANGE_ANY);
+
+  gtk_css_node_invalidate (widget->priv->cssnode, GTK_CSS_CHANGE_ANY);
 
   for (child = gtk_widget_get_first_child (widget);
        child != NULL;
@@ -14848,13 +14849,6 @@ gtk_widget_get_style_context (GtkWidget *widget)
     }
 
   return widget->priv->context;
-}
-
-void
-_gtk_widget_invalidate_style_context (GtkWidget    *widget,
-                                      GtkCssChange  change)
-{
-  gtk_css_node_invalidate (widget->priv->cssnode, change);
 }
 
 /**
