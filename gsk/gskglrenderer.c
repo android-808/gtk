@@ -322,6 +322,8 @@ gsk_gl_renderer_realize (GskRenderer *renderer)
   if (!gsk_gl_renderer_create_programs (self))
     return FALSE;
 
+  gsk_renderer_set_gl_context (renderer, self->gl_context);
+
   return TRUE;
 }
 
@@ -348,6 +350,8 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
 
   if (self->gl_context == gdk_gl_context_get_current ())
     gdk_gl_context_clear_current ();
+
+  gsk_renderer_set_gl_context (renderer, NULL);
 }
 
 static void
