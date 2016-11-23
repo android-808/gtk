@@ -2687,10 +2687,6 @@ gdk_window_begin_paint_internal (GdkWindow            *window,
   gboolean needs_surface;
   cairo_content_t surface_content;
 
-  if (GDK_WINDOW_DESTROYED (window) ||
-      !gdk_window_has_impl (window))
-    return;
-
   if (window->current_paint.surface != NULL)
     {
       g_warning ("A paint operation on the window is alredy in progress. "
@@ -2738,10 +2734,6 @@ gdk_window_end_paint_internal (GdkWindow *window)
 {
   GdkWindowImplClass *impl_class;
   cairo_t *cr;
-
-  if (GDK_WINDOW_DESTROYED (window) ||
-      !gdk_window_has_impl (window))
-    return;
 
   if (window->current_paint.surface == NULL)
     {
@@ -2823,12 +2815,21 @@ gdk_window_begin_draw_frame (GdkWindow            *window,
                              const cairo_region_t *region)
 {
   GdkDrawingContext *context;
+  cairo_region_t *real_region;
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
   g_return_val_if_fail (gdk_window_has_native (window), NULL);
   g_return_val_if_fail (gdk_window_is_toplevel (window), NULL);
   g_return_val_if_fail (gl_context == NULL || GDK_IS_GL_CONTEXT (gl_context), NULL);
-  g_return_val_if_fail (gdk_gl_context_get_window (gl_context) == window, NULL);
+  g_return_val_if_fail (region != NULL, NULL);
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return NULL;
+
+  if (gl_context)
+    {
+      g_return_val_if_fail (gdk_gl_context_get_window (gl_context) == window, NULL);
+    }
 
   if (window->drawing_context != NULL)
     {
@@ -2838,12 +2839,19 @@ gdk_window_begin_draw_frame (GdkWindow            *window,
       return NULL;
     }
 
-  context = GDK_WINDOW_IMPL_GET_CLASS (window->impl)->create_draw_context (window, gl_context, region);
+  real_region = cairo_region_copy (region);
+
+  if (gl_context)
+    gdk_gl_context_begin_frame (gl_context, real_region);
+  else
+    gdk_window_begin_paint_internal (window, real_region);
+
+  context = GDK_WINDOW_IMPL_GET_CLASS (window->impl)->create_draw_context (window, gl_context, real_region);
 
   /* Do not take a reference, to avoid creating cycles */
   window->drawing_context = context;
 
-  gdk_window_begin_paint_internal (window, region);
+  cairo_region_destroy (real_region);
 
   return context;
 }
@@ -2867,8 +2875,13 @@ void
 gdk_window_end_draw_frame (GdkWindow         *window,
                            GdkDrawingContext *context)
 {
+  GdkGLContext *paint_context;
+
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (GDK_IS_DRAWING_CONTEXT (context));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
 
   if (window->drawing_context == NULL)
     {
@@ -2879,8 +2892,17 @@ gdk_window_end_draw_frame (GdkWindow         *window,
     }
   g_return_if_fail (window->drawing_context == context);
 
-  if (gdk_window_has_native (window) && gdk_window_is_toplevel (window))
-    gdk_window_end_paint_internal (window);
+  paint_context = gdk_drawing_context_get_paint_context (context);
+  if (paint_context)
+    {
+      gdk_gl_context_end_frame (paint_context,
+                                gdk_drawing_context_get_clip (context),
+                                window->active_update_area);
+    }
+  else
+    {
+      gdk_window_end_paint_internal (window);
+    }
 
   window->drawing_context = NULL;
 
