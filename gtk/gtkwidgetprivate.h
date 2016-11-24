@@ -159,6 +159,8 @@ struct _GtkWidgetPrivate
   GtkWidget *next_sibling;
   GtkWidget *first_child;
   GtkWidget *last_child;
+
+  GtkWidget *focus_child;
 };
 
 GtkCssNode *  gtk_widget_get_css_node       (GtkWidget *widget);
@@ -302,6 +304,9 @@ void              gtk_widget_adjust_baseline_request       (GtkWidget *widget,
                                                             gint      *natural_baseline);
 void              gtk_widget_get_children_clip             (GtkWidget     *container,
                                                             GtkAllocation *out_clip);
+void              gtk_widget_set_focus_child               (GtkWidget *widget,
+                                                            GtkWidget *child);
+GtkWidget *       gtk_widget_get_focus_child               (GtkWidget *widget);
 
 
 
