@@ -300,6 +300,8 @@ void              gtk_widget_adjust_size_allocation        (GtkWidget         *w
 void              gtk_widget_adjust_baseline_request       (GtkWidget *widget,
                                                             gint      *minimum_baseline,
                                                             gint      *natural_baseline);
+void              gtk_widget_get_children_clip             (GtkWidget     *container,
+                                                            GtkAllocation *out_clip);
 
 
 
