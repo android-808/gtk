@@ -460,7 +460,6 @@ gtk_container_class_init (GtkContainerClass *class)
   widget_class->compute_expand = gtk_container_compute_expand;
   widget_class->snapshot = gtk_container_snapshot;
   widget_class->draw = gtk_container_draw;
-  widget_class->focus = gtk_container_focus;
   widget_class->get_request_mode = gtk_container_get_request_mode;
 
   class->add = gtk_container_add_unimplemented;
@@ -2241,7 +2240,7 @@ tab_compare (gconstpointer a,
 }
 
 static GList *
-gtk_container_focus_sort_tab (GtkContainer     *container,
+gtk_container_focus_sort_tab (GtkWidget        *container,
                               GList            *children,
                               GtkDirectionType  direction,
                               GtkWidget        *old_focus)
@@ -2615,7 +2614,7 @@ gtk_container_focus_sort_left_right (GtkContainer     *container,
  *   removed.
  **/
 GList *
-_gtk_container_focus_sort (GtkContainer     *container,
+_gtk_container_focus_sort (GtkWidget        *container,
                            GList            *children,
                            GtkDirectionType  direction,
                            GtkWidget        *old_focus)
