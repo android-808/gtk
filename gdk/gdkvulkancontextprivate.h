@@ -51,13 +51,15 @@ struct _GdkVulkanContextClass
 
 #ifdef GDK_WINDOWING_VULKAN
 
+const char *    gdk_vulkan_strerror                             (VkResult         result);
+
 static inline VkResult
 gdk_vulkan_handle_result (VkResult    res,
                           const char *called_function)
 {
   if (res != VK_SUCCESS)
     {
-      GDK_NOTE (VULKAN,g_printerr ("%s(): %d\n", called_function, res));
+      GDK_NOTE (VULKAN,g_printerr ("%s(): %s (%d)\n", called_function, gdk_vulkan_strerror (res), res));
     }
   return res;
 }

@@ -50,6 +50,12 @@ GType gdk_vulkan_context_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_3_90
 VkInstance              gdk_vulkan_context_get_instance             (GdkVulkanContext  *context);
+GDK_AVAILABLE_IN_3_90
+VkPhysicalDevice        gdk_vulkan_context_get_physical_device      (GdkVulkanContext  *context);
+GDK_AVAILABLE_IN_3_90
+VkDevice                gdk_vulkan_context_get_device               (GdkVulkanContext  *context);
+GDK_AVAILABLE_IN_3_90
+VkQueue                 gdk_vulkan_context_get_queue                (GdkVulkanContext  *context);
 
 #endif /* GDK_WINDOWING_VULKAN */
 
